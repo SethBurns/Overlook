@@ -14,29 +14,44 @@
     <title>Overlook</title>
   </head>
   <body>
-    <nav>
-      <h1>OVERLOOK BOOKING</h1>
-      <section class="total-spending">
-        <p>TOTAL SPENT</p>
-        <p class="total-spent">$$$</p>
-      </section>
-      <section class="nav-user">
-        <p class="customer">customer</p>
-      </section>
-    </nav>
-    <main>
-      <section class="search-rooms">
+    <section class="login-page hidden">
+      <div class="login-centered">
+        <h1>OVERLOOK</h1>
+        <label class="login-label" for="userLogin">Username:</label>
+        <input class="login" id="userLogin" type="text" required />
+        <label class="login-label" for="password">Password:</label>
+        <input class="login" id="password" type="text" required />
+        <button class="login-button">LOGIN</button>
+        <p class="login-message"></p>
+      </div>
+    </section>
+    <nav class="nav">
+      <div class="left-nav">
+        <h1 class="login-name"></h1>
+        <h1>BOOK YOUR ROOM</h1>
+      </div>
+      <div class="money-spent">
+        <p>TOTAL BOOKING VALUE</p>
+        <p class="total-spent">$0</p>
+      </div>
+      <div class="search">
         <h3>Book Now</h3>
-        <label for="search-date">Check In Date:</label>
-        <input id="search-date" type="date" required />
-        <label for="roomType">Room Type:</label>
-        <select name="roomType" id="roomType" class="room-search">
-          <option value="Single Room">Single Room</option>
-          <option value="Suite">Suite</option>
-          <option value="Residential Suite">Residential Suite</option>
-          <option value="Junior Suite">Junior Suite</option>
-        </select>
-        <button id="search-bookings">SEARCH</button>
+        <div class="book-now-nav">
+          <label for="search-date">Check In Date:</label>
+          <input id="search-date" type="date" required />
+          <label for="roomType">Room Type:</label>
+          <select name="roomType" id="roomType" class="room-search">
+            <option value="Single Room">Single Room</option>
+            <option value="Suite">Suite</option>
+            <option value="Residential Suite">Residential Suite</option>
+            <option value="Junior Suite">Junior Suite</option>
+          </select>
+          <button id="search-bookings">SEARCH</button>
+        </div>
+      </div>
+    </nav>
+    <main class="main">
+      <section class="search-rooms">
         <div class="display-results"></div>
       </section>
     </main>
