@@ -1,16 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webpack Starter Kit</title>
-</head>
-<body>
-  <img src="./images/turing-logo.png" alt="turing logo">
-  
-  <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
-  <script src="bundle.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="../src/images/favicon.ico" />
+    <title>Overlook</title>
+  </head>
+  <body>
+    <section class="login-page">
+      <div class="login-centered">
+        <h1>OVERLOOK</h1>
+        <label class="login-label" for="userLogin">Username:</label>
+        <input class="login" id="userLogin" type="text" required />
+        <label class="login-label" for="password">Password:</label>
+        <input class="login" id="password" type="text" required />
+        <button class="login-button">LOGIN</button>
+        <p class="login-message hidden"></p>
+      </div>
+    </section>
+    <nav class="nav hidden">
+      <div class="left-nav">
+        <h1 class="login-name"></h1>
+        <h1>BOOK YOUR ROOM</h1>
+      </div>
+      <div class="money-spent">
+        <p>TOTAL BOOKING VALUE</p>
+        <p class="total-spent">$0</p>
+      </div>
+      <div class="search">
+        <h3>Book Now</h3>
+        <div class="book-now-nav">
+          <label for="search-date">Check In Date:</label>
+          <input id="search-date" type="date" required />
+          <label for="roomType">Room Type:</label>
+          <select name="roomType" id="roomType" class="room-search">
+            <option value="Single Room">Single Room</option>
+            <option value="Suite">Suite</option>
+            <option value="Residential Suite">Residential Suite</option>
+            <option value="Junior Suite">Junior Suite</option>
+          </select>
+          <button id="search-bookings">SEARCH</button>
+        </div>
+      </div>
+    </nav>
+    <main class="main hidden">
+      <section class="search-rooms">
+        <div class="display-results"></div>
+      </section>
+    </main>
 
-</body>
+    <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
+    <script src="bundle.js"></script>
+  </body>
 </html>
