@@ -2,16 +2,16 @@ import {
   username,
   password,
   loginMessage,
-  customersData,
   bookings,
   rooms,
   loginPage,
-  navBar,
-  mainView,
   loginName,
+  mainDashboard,
+  displayResults,
 } from './scripts';
 
 import { errorHandling } from './apiCalls';
+import { returnBookings } from './booking';
 
 let loginCustomer;
 let allCustomerData;
@@ -42,6 +42,7 @@ const loginButtonClicked = () => {
     showLoginError();
   } else if (loginID) {
     fetchSingleCustomer(loginID)
+    renderBookings(loginCustomer)
   } else if (username.value === 'manager') {
     fetchManagerView()
   }
@@ -53,9 +54,10 @@ const fetchSingleCustomer = (loginID) => {
     .then(data => {
       if (!data.message && loginID) {
         loginCustomer = data
-        loginName.innerHTML = `Welcome, ${loginCustomer.name}`
+        console.log(loginCustomer)
+        loginName.innerHTML = `${loginCustomer.name}`
         hide([loginPage]);
-        show([navBar, mainView]);
+        show([mainDashboard]);
       } else {
         showLoginError()
       }
@@ -70,7 +72,7 @@ const fetchManagerView = () => {
     if (!data.message) {
       allCustomerData = data
       hide([loginPage]);
-      show([navBar, mainView])
+      show([mainDashboard])
     } else {
       showLoginError()
     }
@@ -81,6 +83,13 @@ const fetchManagerView = () => {
 const showLoginError = () => {
   show([loginMessage])
   loginMessage.innerHTML = `Invalid Username or Password`
+}
+
+const renderBookings = () => {
+  let customerBookings = returnBookings(loginCustomer)
+  customerBookings.forEach(booking => {
+    displayResults.innerHTML += `<div class=""></div>`
+  })
 }
 
 export { loginButtonClicked, loginCustomer };

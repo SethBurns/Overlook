@@ -3,12 +3,13 @@ import './css/styles.css';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/vecteezy_palm-island-dubai_1906870.png'
+import './images/user-icon.png'
+import './images/hotel-lobby.jpg'
 
 import { fetchAPI } from './apiCalls';
 import { loginButtonClicked, loginCustomer } from './domUpdates';
 
 // GLOBAL VARIABLES //
-let customersData;
 let rooms;
 let bookings;
 
@@ -23,6 +24,8 @@ const loginPage = document.querySelector('.login-page');
 const navBar = document.querySelector('.nav');
 const mainView = document.querySelector('.main');
 const loginName = document.querySelector('.login-name');
+const mainDashboard = document.querySelector('.main-dashboard')
+const displayResults = document.querySelector('.display-results')
 
 const startup = () => {
   Promise.all([fetchAPI('rooms'), fetchAPI('bookings')]).then((data) => {
@@ -40,11 +43,12 @@ export {
   username,
   password,
   loginMessage,
-  customersData,
   rooms,
   bookings,
   loginPage,
   navBar,
   mainView,
   loginName,
+  mainDashboard,
+  displayResults,
 };

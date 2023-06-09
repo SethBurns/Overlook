@@ -25,36 +25,42 @@
         <p class="login-message hidden"></p>
       </div>
     </section>
-    <nav class="nav hidden">
-      <div class="left-nav">
-        <h1 class="login-name"></h1>
-        <h1>BOOK YOUR ROOM</h1>
-      </div>
-      <div class="money-spent">
-        <p>TOTAL BOOKING VALUE</p>
-        <p class="total-spent">$0</p>
-      </div>
-      <div class="search">
-        <h3>Book Now</h3>
-        <div class="book-now-nav">
-          <label for="search-date">Check In Date:</label>
-          <input id="search-date" type="date" required />
-          <label for="roomType">Room Type:</label>
-          <select name="roomType" id="roomType" class="room-search">
-            <option value="Single Room">Single Room</option>
-            <option value="Suite">Suite</option>
-            <option value="Residential Suite">Residential Suite</option>
-            <option value="Junior Suite">Junior Suite</option>
-          </select>
-          <button id="search-bookings">SEARCH</button>
+    <section class="main-dashboard hidden">
+      <nav class="nav">
+        <div class="search">
+          <div class="book-now-nav">
+            <div class="inputs">
+              <label for="searchDate">Check In Date:&nbsp;&nbsp;</label>
+              <input id="searchDate" type="date" required />
+            </div>
+            <div class="inputs">
+              <label for="roomType">Room Type:</label>
+              <select name="roomType" id="roomType" class="room-search">
+                <option value="anyRoom">Any Room</option>
+                <option value="singleRoom">Single Room</option>
+                <option value="suite">Suite</option>
+                <option value="residentialSuite">Residential Suite</option>
+                <option value="juniorSuite">Junior Suite</option>
+              </select>
+            </div>
+            <button class="search-rooms">SEARCH</button>
+          </div>
         </div>
-      </div>
-    </nav>
-    <main class="main hidden">
-      <section class="search-rooms">
-        <div class="display-results"></div>
-      </section>
-    </main>
+        <div class="right-nav">
+          <img src="./images/user-icon.png" alt="User Icon Logo">
+          <h1 class="login-name">Seth Burns</h1>
+        </div>
+      </nav>
+      <main class="main">
+        <section class="searched-rooms">
+          <div class="display-results"></div>
+        </section>
+        <div class="money-spent">
+          <p>TOTAL BOOKING VALUE</p>
+          <p class="total-spent">$0</p>
+        </div>
+      </main>
+    </section>
 
     <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
     <script src="bundle.js"></script>
