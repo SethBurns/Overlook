@@ -15,4 +15,4 @@ const errorHandling = (err) => {
 
 
 
-export { fetchAPI, }
+export { fetchAPI, errorHandling }

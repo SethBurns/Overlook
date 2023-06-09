@@ -25,7 +25,8 @@ body {
 }
 
 .login-centered {
-  background-color: rgba(205, 221, 255, 0.485);
+  background-color: rgba(194, 247, 247, 0.285);
+  backdrop-filter: blur(3px);
   display: flex;
   flex-direction: column;
   width: 25%;
@@ -33,6 +34,14 @@ body {
   margin-top: 100px;
   align-items: center;
   border-radius: 25px;
+  padding-bottom: 15px;
+}
+
+.login-button {
+  background-color: aqua;
+  border-style: none;
+  padding: 10px 30px;
+  font-weight: bold;
 }
 
 .left-nav,
@@ -56,6 +65,9 @@ body {
 
 .login-message {
   color: crimson;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.29);
+  padding: 5px 10px;
 }
 
 .login-name {

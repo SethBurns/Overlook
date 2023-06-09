@@ -25,10 +25,9 @@ const mainView = document.querySelector('.main');
 const loginName = document.querySelector('.login-name');
 
 const startup = () => {
-  Promise.all([fetchAPI('customers'), fetchAPI('rooms'), fetchAPI('bookings')]).then((data) => {
-    customersData = data[0];
-    rooms = data[1];
-    bookings = data[2];
+  Promise.all([fetchAPI('rooms'), fetchAPI('bookings')]).then((data) => {
+    rooms = data[0];
+    bookings = data[1];
   });
 };
 
