@@ -6,20 +6,46 @@ import {
   loginName,
   mainDashboard,
   displayResults,
-  returnBookings,
   totalSpent,
-  filterAvailableRooms,
   dateSelect,
   roomSelect,
   availableRooms,
   availableRoomsHeader,
   searchedRooms,
-  dataModel
+  dataModel,
 } from './scripts';
 
-import { errorHandling, postBooking } from './apiCalls';
+import { filterAvailableRooms, returnBookings } from './testableFunctions';
 
 
+
+// API //
+const fetchAPI = (dataType) => {
+  return fetch(`http://localhost:3001/api/v1/${dataType}`)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => errorHandling(err));
+};
+
+const errorHandling = (err) => {
+  alert(`${err.name}: ${err.message} Overlook failed to obtain data from the server!`);
+};
+
+const postBooking = (booking) => {
+  fetch('http://localhost:3001/api/v1/bookings', {
+    method: 'POST',
+    body: JSON.stringify(booking),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch(() => alert("Something went wrong, your booking was not completed!"));
+}
 
 // Hide and Unhide functions //
 const hide = (e) => {
@@ -35,17 +61,17 @@ const show = (e) => {
 };
 
 const loginButtonClicked = () => {
-  let loginID;
+  
   if (username.value.includes('customer')) {
-    loginID = username.value.replace('customer', '');
+    dataModel.loginID = username.value.replace('customer', '');
   }
   loginMessage.innerHTML = '';
   loginName.innerHTML = '';
 
   if (password.value !== 'overlook2021') {
     showLoginError();
-  } else if (loginID) {
-    fetchSingleCustomer(loginID);
+  } else if (dataModel.loginID) {
+    fetchSingleCustomer(dataModel.loginID);
   } else if (username.value === 'manager') {
     fetchManagerView();
   }
@@ -60,6 +86,7 @@ const fetchSingleCustomer = (loginID) => {
         loginName.innerHTML = `${dataModel.loginCustomer.name}`;
         hide([loginPage]);
         show([mainDashboard]);
+
         renderBookings();
         renderTotalSpent();
       } else {
@@ -90,9 +117,9 @@ const showLoginError = () => {
 };
 
 const renderBookings = () => {
-  let customerBookings = returnBookings(dataModel.loginCustomer.id);
-
-  customerBookings.forEach((booking) => {
+  dataModel.customerBookings = returnBookings(dataModel.loginCustomer.id);
+  displayResults.innerHTML = ``
+  dataModel.customerBookings.forEach((booking) => {
     let className = dataModel.rooms.rooms
       .find((room) => room.number === booking.roomNumber)
       .roomType.split(' ')
@@ -105,10 +132,9 @@ const renderBookings = () => {
 };
 
 const renderTotalSpent = () => {
-  let customerBookings = returnBookings(dataModel.loginCustomer.id);
   let total = 0;
 
-  customerBookings.forEach((booking) => {
+  dataModel.customerBookings.forEach((booking) => {
     return (total += dataModel.rooms.rooms[booking.roomNumber - 1].costPerNight);
   });
   totalSpent.innerHTML = `Your Total Bookings: $${Math.round(total * 100) / 100}`;
@@ -150,13 +176,15 @@ const handleBookingClick = (e) => {
     roomNumber: Number(e.target.id),
   };
   postBooking(booking);
-  
+
   let choiceIndex = dataModel.searchedAvailableRooms.indexOf(
     dataModel.searchedAvailableRooms.find((room) => room.number === Number(e.target.id))
   );
-  dataModel.searchedAvailableRooms.splice(choiceIndex, 1)
-  dataModel.bookings.bookings.push(booking)
-  searchButtonClicked()
+  dataModel.searchedAvailableRooms.splice(choiceIndex, 1);
+  dataModel.bookings.bookings.push(booking);
+  console.log(dataModel);
+  searchButtonClicked();
+  fetchSingleCustomer(dataModel.loginID);
 };
 
 function renderSearchedRooms() {
@@ -168,4 +196,4 @@ function renderSearchedRooms() {
   });
 }
 
-export { loginButtonClicked, dataModel, searchButtonClicked };
+export { loginButtonClicked, dataModel, searchButtonClicked, fetchAPI };
