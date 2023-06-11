@@ -4,13 +4,22 @@
 
 html {
   height: 100%;
+  background-color: black;
 }
 
 body {
-  background: rgb(168, 170, 173) 0%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   height: 100%;
+  width: 100%;
+}
+
+p {
+  margin: 5px;
+}
+
+#userLogo {
+  filter: invert(100%);
 }
 
 .login-page {
@@ -39,18 +48,149 @@ body {
 
 .login-button {
   background-color: aqua;
-  border-style: none;
+  border-style: solid;
+  border-color: aqua;
   padding: 10px 30px;
   font-weight: bold;
 }
 
-.left-nav,
-.money-spent,
-.search {
-  background-color: aqua;
+.login-button:hover {
+  cursor: pointer;
+  border-color: black;
+}
+
+.main-dashboard {
+  background-image: url('../images/hotel-lobby.jpg');
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.booked-rooms {
+  float: right;
+  text-align: center;
+  margin-right: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-style: solid;
+  border-color: antiquewhite;
+}
+
+.searched-rooms {
+  float: left;
+  text-align: center;
+  margin-left: 10px;
+  background-color: rgba(0, 0, 0, 0.5);;
+  border-style: solid;
+  border-color: antiquewhite;
+}
+
+.total-spent,
+.available-rooms-header {
+  margin: 5px;
+  color: white;
+}
+
+.info {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  width: 50%;
+  border-radius: 10px;
+}
+
+.display-results {
   display: flex;
   flex-direction: column;
+  float: right;
+  align-content: flex-end;
+  height: 724px;
+  overflow: auto;
+}
+
+.available-rooms {
+  display: flex;
+  justify-content: space-evenly;
+  float: left;
+  flex-wrap: wrap;
+  height: 724px;
+  width: 700px;
+  overflow: auto;
+  color: white;
+}
+
+.residential-suite {
+  background-image: url('../images/residential-suite.png');
+}
+
+.junior-suite {
+  background-image: url('../images/junior-suite.png');
+}
+
+.suite {
+  background-image: url('../images/suite.png');
+}
+
+.single-room {
+  background-image: url('../images/single-room.png');
+}
+
+.residential-suite,
+.junior-suite,
+.single-room,
+.suite {
+  background-size: cover;
+  width: 320px;
+  height: 188px;
+  margin: 5px;
+  border-radius: 12px;
+}
+
+.book-now-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-rooms,
+.book-now {
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: black;
+  font-size: medium;
+}
+
+.search-rooms:hover,
+.book-now:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-style: solid;
+  border-color: black;
+  cursor: pointer;
+}
+
+.inputs {
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#roomType,
+#searchDate {
+  background-color: rgba(255, 255, 255, 0.519);
+  color: rgb(0, 0, 0);
+  font-size: large;
+  border-style: none;
+}
+ 
+.right-nav,
+.money-spent,
+.search {
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
   align-items: center;
+  padding: 10px 30px;
+  font-size: large;
 }
 
 .login-label,
@@ -66,8 +206,9 @@ body {
 .login-message {
   color: crimson;
   font-weight: bold;
-  background-color: rgba(0, 0, 0, 0.29);
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 5px 10px;
+  border-radius: 2px;
 }
 
 .login-name {
@@ -75,11 +216,12 @@ body {
 }
 
 nav {
-  background:rgb(121, 172, 248);
+  background:rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .hidden {
