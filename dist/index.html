@@ -36,29 +36,30 @@
             <div class="inputs">
               <label for="roomType">Room Type:</label>
               <select name="roomType" id="roomType" class="room-search">
-                <option value="anyRoom">Any Room</option>
-                <option value="singleRoom">Single Room</option>
+                <option value="any room">Any Room</option>
+                <option value="single room">Single Room</option>
                 <option value="suite">Suite</option>
-                <option value="residentialSuite">Residential Suite</option>
-                <option value="juniorSuite">Junior Suite</option>
+                <option value="residential suite">Residential Suite</option>
+                <option value="junior suite">Junior Suite</option>
               </select>
             </div>
             <button class="search-rooms">SEARCH</button>
           </div>
         </div>
         <div class="right-nav">
-          <img src="./images/user-icon.png" alt="User Icon Logo">
+          <img id="userLogo" src="./images/user-icon.png" alt="User Icon Logo">
           <h1 class="login-name">Seth Burns</h1>
         </div>
       </nav>
       <main class="main">
-        <section class="searched-rooms">
+        <section class="searched-rooms hidden">
+          <h1 class="available-rooms-header"></h1>
+          <div class="available-rooms"></div>
+        </section>
+        <section class="booked-rooms">
+          <h1 class="total-spent">Your Bookings</h1>
           <div class="display-results"></div>
         </section>
-        <div class="money-spent">
-          <p>TOTAL BOOKING VALUE</p>
-          <p class="total-spent">$0</p>
-        </div>
       </main>
     </section>
 
