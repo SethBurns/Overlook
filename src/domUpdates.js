@@ -18,10 +18,11 @@ import {
   searchedRooms,
 } from './scripts';
 
-import { errorHandling } from './apiCalls';
+import { errorHandling, postBooking } from './apiCalls';
 
 let loginCustomer;
 let allCustomerData;
+let dataModel = {};
 
 // Hide and Unhide functions //
 const hide = (e) => {
@@ -116,9 +117,9 @@ const renderTotalSpent = () => {
   totalSpent.innerHTML = `Your Total Bookings: $${Math.round(total * 100) / 100}`;
 };
 
-// const handleBookingClick = (e) => {console.log("hello", e.target.id)}
 
 const searchButtonClicked = () => {
+  dataModel.date = dateSelect.value.split("-").join("/")
   let filteredRooms = filterAvailableRooms(dateSelect.value);
   availableRoomsHeader.innerHTML = `Available Rooms for ${dateSelect.value}`;
   availableRooms.innerHTML = ``;
@@ -137,17 +138,28 @@ const searchButtonClicked = () => {
   }
   
   if (!searchedAvailableRooms.length) {
-    availableRooms.innerHTML = `<p>We are so sorry, we do not have vacancy on your chosen date!`;
+    availableRooms.innerHTML = `<p>We are so sorry, we do not have vacancy on your chosen date! Please adjust your search.`;
     return
   }
 
   searchedAvailableRooms.forEach((availableRoom) => {
     let className = availableRoom.roomType.split(' ').join('-');
     let roomStyle = availableRoom.roomType.toUpperCase();
-    availableRooms.innerHTML += `<div class="${className}"><div class="info"><p>${roomStyle}</p><p>Room Number: ${availableRoom.number}</p><p>Bed(s): ${availableRoom.numBeds} ${availableRoom.bedSize}</p><p>Price: ${availableRoom.costPerNight}</p></div><button class='book-now' id="room${availableRoom.number}">BOOK NOW</button></div>`;
+    availableRooms.innerHTML += `<div class="${className}"><div class="info"><p>${roomStyle}</p><p>Room Number: ${availableRoom.number}</p><p>Bed(s): ${availableRoom.numBeds} ${availableRoom.bedSize}</p><p>Price: ${availableRoom.costPerNight}</p></div><button class='book-now' id="${availableRoom.number}">BOOK NOW</button></div>`;
     const bookNowButton = document.querySelector(`#room${availableRoom.number}`)
   });
-  availableRooms.addEventListener('click', (e) => {console.log("hello", e.target.id)})
+  availableRooms.addEventListener('click', handleBookingClick)
 };
+
+const handleBookingClick = (e) => {
+  
+  let booking = {
+    "userID": loginCustomer.id,
+    "date": dataModel.date,
+    "roomNumber": Number(e.target.id)
+  }
+  postBooking(booking)
+  
+}
 
 export { loginButtonClicked, loginCustomer, searchButtonClicked };
