@@ -16,7 +16,7 @@ import {
   dataModel,
 } from './scripts';
 
-import { filterAvailableRooms, returnBookings } from './testableFunctions';
+import { filterAvailableRooms, returnBookings, getChoiceIndex } from './testableFunctions';
 
 // API //
 const fetchAPI = (dataType) => {
@@ -60,19 +60,19 @@ const show = (e) => {
 };
 
 const loginButtonClicked = () => {
-  if (username.value.includes('customer')) {
-    dataModel.loginID = username.value.replace('customer', '');
-  }
-  loginMessage.innerHTML = '';
-  loginName.innerHTML = '';
+  // if (username.value.includes('customer')) {
+  //   dataModel.loginID = username.value.replace('customer', '');
+  // }
+  // loginMessage.innerHTML = '';
+  // loginName.innerHTML = '';
 
-  if (password.value !== 'overlook2021') {
-    showLoginError();
-  } else if (dataModel.loginID) {
-    fetchSingleCustomer(dataModel.loginID);
-  } else if (username.value === 'manager') {
-    fetchManagerView();
-  }
+  // if (password.value !== 'overlook2021') {
+  //   showLoginError();
+  // } else if (dataModel.loginID) {
+    fetchSingleCustomer(13);
+  // } else if (username.value === 'manager') {
+  //   fetchManagerView();
+  // }
 };
 
 const fetchSingleCustomer = (loginID) => {
@@ -82,7 +82,7 @@ const fetchSingleCustomer = (loginID) => {
       if (!data.message && loginID) {
         dataModel.loginCustomer = data;
         loginName.innerHTML = `${dataModel.loginCustomer.name}`;
-        hide([loginPage]);
+        // hide([loginPage]);
         show([mainDashboard]);
 
         renderBookings();
@@ -100,7 +100,7 @@ const fetchManagerView = () => {
     .then((data) => {
       if (!data.message) {
         dataModel.allCustomerData = data;
-        hide([loginPage]);
+        // hide([loginPage]);
         show([mainDashboard]);
       } else {
         showLoginError();
@@ -109,10 +109,10 @@ const fetchManagerView = () => {
     .catch((err) => errorHandling(err));
 };
 
-const showLoginError = () => {
-  show([loginMessage]);
-  loginMessage.innerHTML = `Invalid Username or Password`;
-};
+// const showLoginError = () => {
+//   show([loginMessage]);
+//   loginMessage.innerHTML = `Invalid Username or Password`;
+// };
 
 const renderBookings = () => {
   dataModel.customerBookings = returnBookings(dataModel.loginCustomer.id);
@@ -187,11 +187,7 @@ const handleBookingClick = (e) => {
   fetchSingleCustomer(dataModel.loginID);
 };
 
-function getChoiceIndex(e) {
-  return dataModel.searchedAvailableRooms.indexOf(
-    dataModel.searchedAvailableRooms.find((room) => room.number === Number(e.target.id))
-  );
-}
+
 
 function renderSearchedRooms() {
   dataModel.searchedAvailableRooms.forEach((availableRoom) => {

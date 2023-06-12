@@ -22,9 +22,9 @@ const username = document.querySelector('#userLogin');
 const password = document.querySelector('#password');
 const nav = document.querySelector('.nav');
 const main = document.querySelector('.main');
-const loginButton = document.querySelector('.login-button');
-const loginMessage = document.querySelector('.login-message');
-const loginPage = document.querySelector('.login-page');
+// const loginButton = document.querySelector('.login-button');
+// const loginMessage = document.querySelector('.login-message');
+// const loginPage = document.querySelector('.login-page');
 const navBar = document.querySelector('.nav');
 const mainView = document.querySelector('.main');
 const loginName = document.querySelector('.login-name');
@@ -44,14 +44,15 @@ const startup = () => {
   Promise.all([fetchAPI('rooms'), fetchAPI('bookings')]).then((data) => {
     dataModel.rooms = data[0];
     dataModel.bookings = data[1];
-  });
+  })
+  .then(loginButtonClicked());
 };
 
 
 // EVENT LISTENERS //
 window.addEventListener('load', startup);
 
-loginButton.addEventListener('click', loginButtonClicked);
+// loginButton.addEventListener('click', loginButtonClicked);
 
 searchButton.addEventListener('click', searchButtonClicked)
 
@@ -63,8 +64,8 @@ searchButton.addEventListener('click', searchButtonClicked)
 export {
   username,
   password,
-  loginMessage,
-  loginPage,
+  // loginMessage,
+  // loginPage,
   navBar,
   mainView,
   loginName,

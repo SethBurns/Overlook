@@ -15,4 +15,10 @@ const filterAvailableRooms = (date) => {
   return dataModel.rooms.rooms.filter((room) => !bookedRooms.includes(room.number));
 };
 
-export {filterAvailableRooms, returnBookings}
+function getChoiceIndex(e) {
+  return dataModel.searchedAvailableRooms.indexOf(
+    dataModel.searchedAvailableRooms.find((room) => room.number === Number(e.target.id))
+  );
+}
+
+export {filterAvailableRooms, returnBookings, getChoiceIndex}
