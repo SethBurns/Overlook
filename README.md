@@ -19,3 +19,5 @@ I'm proud of the overall design of the site, as well as the functionality and ho
 On the next project, I will start with tests. This will help me ensure clean and SRP code with pure functions that can then later be used to manipulate the DOM. I started fast and hard on this project, and taking more time to zoom out and plan would have benefited my sanity toward the end. On the next project, I will also split out my functions into easier to follow files, to be more organized for others to review.
 
 # Screenshots
+![Login Page View](src/images/LoginPage.gif)
+![Dashboard View](src/images/DashboardView.gif)
