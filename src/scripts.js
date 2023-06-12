@@ -10,12 +10,12 @@ import './images/suite.png';
 import './images/junior-suite.png';
 import './images/single-room.png';
 
-import { fetchAPI } from './apiCalls';
-import { loginButtonClicked, loginCustomer, searchButtonClicked } from './domUpdates';
+import { loginButtonClicked, searchButtonClicked, fetchAPI } from './domUpdates';
 
 // GLOBAL VARIABLES //
-let rooms;
-let bookings;
+// let rooms;
+// let bookings;
+let dataModel = {};
 
 // QUERY SELECTORS //
 const username = document.querySelector('#userLogin');
@@ -37,11 +37,13 @@ const searchButton = document.querySelector('.search-rooms');
 const availableRoomsHeader = document.querySelector('.available-rooms-header')
 const availableRooms = document.querySelector('.available-rooms')
 const searchedRooms = document.querySelector('.searched-rooms')
+const bookingMessage = document.querySelector('.booking-message')
+
 
 const startup = () => {
   Promise.all([fetchAPI('rooms'), fetchAPI('bookings')]).then((data) => {
-    rooms = data[0];
-    bookings = data[1];
+    dataModel.rooms = data[0];
+    dataModel.bookings = data[1];
   });
 };
 
@@ -56,27 +58,12 @@ searchButton.addEventListener('click', searchButtonClicked)
 // FUNCTIONS //
 
 
-const returnBookings = (id) => {
-  return bookings.bookings
-    .filter((booking) => id === booking.userID)
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
-};
 
-const filterAvailableRooms = (date) => {
-  const reformatedDate = date.split("-").join("/")
-  const bookedRooms = bookings.bookings
-    .filter((booking) => booking.date === reformatedDate)
-    .map((booking) => booking.roomNumber);
-
-  return rooms.rooms.filter((room) => !bookedRooms.includes(room.number));
-};
 
 export {
   username,
   password,
   loginMessage,
-  rooms,
-  bookings,
   loginPage,
   navBar,
   mainView,
@@ -89,6 +76,6 @@ export {
   availableRoomsHeader,
   availableRooms,
   searchedRooms,
-  returnBookings,
-  filterAvailableRooms,
+  bookingMessage,
+  dataModel,
 };

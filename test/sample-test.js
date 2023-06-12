@@ -2,10 +2,10 @@ import chai from 'chai';
 const expect = chai.expect;
 import { testBookings, testRooms } from './testData';
 
-// import { filterAvailableRooms } from '../src/scripts';
+import { filterAvailableRooms } from '../src/scripts';
 
-// let bookings = testBookings;
-// let rooms = testRooms;
+let bookings = testBookings;
+let rooms = testRooms;
 
 describe('See if the tests are running', function () {
   it('should return true', function () {

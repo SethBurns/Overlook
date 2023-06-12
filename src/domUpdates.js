@@ -2,27 +2,49 @@ import {
   username,
   password,
   loginMessage,
-  bookings,
-  rooms,
   loginPage,
   loginName,
   mainDashboard,
   displayResults,
-  returnBookings,
   totalSpent,
-  filterAvailableRooms,
   dateSelect,
   roomSelect,
   availableRooms,
   availableRoomsHeader,
   searchedRooms,
+  bookingMessage,
+  dataModel,
 } from './scripts';
 
-import { errorHandling, postBooking } from './apiCalls';
+import { filterAvailableRooms, returnBookings } from './testableFunctions';
 
-let loginCustomer;
-let allCustomerData;
-let dataModel = {};
+// API //
+const fetchAPI = (dataType) => {
+  return fetch(`http://localhost:3001/api/v1/${dataType}`)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => errorHandling(err));
+};
+
+const errorHandling = (err) => {
+  alert(`${err.name}: ${err.message} Overlook failed to obtain data from the server!`);
+};
+
+const postBooking = (booking) => {
+  fetch('http://localhost:3001/api/v1/bookings', {
+    method: 'POST',
+    body: JSON.stringify(booking),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch(() => alert('Something went wrong, your booking was not completed!'));
+};
 
 // Hide and Unhide functions //
 const hide = (e) => {
@@ -38,17 +60,16 @@ const show = (e) => {
 };
 
 const loginButtonClicked = () => {
-  let loginID;
   if (username.value.includes('customer')) {
-    loginID = username.value.replace('customer', '');
+    dataModel.loginID = username.value.replace('customer', '');
   }
   loginMessage.innerHTML = '';
   loginName.innerHTML = '';
 
   if (password.value !== 'overlook2021') {
     showLoginError();
-  } else if (loginID) {
-    fetchSingleCustomer(loginID);
+  } else if (dataModel.loginID) {
+    fetchSingleCustomer(dataModel.loginID);
   } else if (username.value === 'manager') {
     fetchManagerView();
   }
@@ -59,10 +80,11 @@ const fetchSingleCustomer = (loginID) => {
     .then((response) => response.json())
     .then((data) => {
       if (!data.message && loginID) {
-        loginCustomer = data;
-        loginName.innerHTML = `${loginCustomer.name}`;
+        dataModel.loginCustomer = data;
+        loginName.innerHTML = `${dataModel.loginCustomer.name}`;
         hide([loginPage]);
         show([mainDashboard]);
+
         renderBookings();
         renderTotalSpent();
       } else {
@@ -77,7 +99,7 @@ const fetchManagerView = () => {
     .then((response) => response.json())
     .then((data) => {
       if (!data.message) {
-        allCustomerData = data;
+        dataModel.allCustomerData = data;
         hide([loginPage]);
         show([mainDashboard]);
       } else {
@@ -93,14 +115,14 @@ const showLoginError = () => {
 };
 
 const renderBookings = () => {
-  let customerBookings = returnBookings(loginCustomer.id);
-
-  customerBookings.forEach((booking) => {
-    let className = rooms.rooms
+  dataModel.customerBookings = returnBookings(dataModel.loginCustomer.id);
+  displayResults.innerHTML = ``;
+  dataModel.customerBookings.forEach((booking) => {
+    let className = dataModel.rooms.rooms
       .find((room) => room.number === booking.roomNumber)
       .roomType.split(' ')
       .join('-');
-    let roomIndex = rooms.rooms[booking.roomNumber - 1];
+    let roomIndex = dataModel.rooms.rooms[booking.roomNumber - 1];
     let roomStyle = className.split('-').join(' ').toUpperCase();
 
     displayResults.innerHTML += `<div class="${className}"><div class="info"><p>Date: ${booking.date}</p><p>${roomStyle}</p><p>Room Number: ${booking.roomNumber}</p><p>Bed(s): ${roomIndex.numBeds} ${roomIndex.bedSize}</p><p>Price: ${roomIndex.costPerNight}</p></div></div>`;
@@ -108,58 +130,76 @@ const renderBookings = () => {
 };
 
 const renderTotalSpent = () => {
-  let customerBookings = returnBookings(loginCustomer.id);
   let total = 0;
 
-  customerBookings.forEach((booking) => {
-    return (total += rooms.rooms[booking.roomNumber - 1].costPerNight);
+  dataModel.customerBookings.forEach((booking) => {
+    return (total += dataModel.rooms.rooms[booking.roomNumber - 1].costPerNight);
   });
   totalSpent.innerHTML = `Your Total Bookings: $${Math.round(total * 100) / 100}`;
 };
 
-
 const searchButtonClicked = () => {
-  dataModel.date = dateSelect.value.split("-").join("/")
+  dataModel.date = dateSelect.value.split('-').join('/');
   let filteredRooms = filterAvailableRooms(dateSelect.value);
   availableRoomsHeader.innerHTML = `Available Rooms for ${dateSelect.value}`;
   availableRooms.innerHTML = ``;
   show([searchedRooms]);
-  let searchedAvailableRooms;
-  
+
   if (!dateSelect.value.length) {
-    availableRooms.innerHTML = `You must select a date to search!`
-    return
+    availableRooms.innerHTML = `You must select a date to search!`;
+    return;
   }
 
   if (roomSelect.value !== 'any room') {
-    searchedAvailableRooms = filteredRooms.filter((room) => (room.roomType === roomSelect.value));
+    dataModel.searchedAvailableRooms = filteredRooms.filter(
+      (room) => room.roomType === roomSelect.value
+    );
   } else {
-    searchedAvailableRooms = filteredRooms;
-  }
-  
-  if (!searchedAvailableRooms.length) {
-    availableRooms.innerHTML = `<p>We are so sorry, we do not have vacancy on your chosen date! Please adjust your search.`;
-    return
+    dataModel.searchedAvailableRooms = filteredRooms;
   }
 
-  searchedAvailableRooms.forEach((availableRoom) => {
-    let className = availableRoom.roomType.split(' ').join('-');
-    let roomStyle = availableRoom.roomType.toUpperCase();
-    availableRooms.innerHTML += `<div class="${className}"><div class="info"><p>${roomStyle}</p><p>Room Number: ${availableRoom.number}</p><p>Bed(s): ${availableRoom.numBeds} ${availableRoom.bedSize}</p><p>Price: ${availableRoom.costPerNight}</p></div><button class='book-now' id="${availableRoom.number}">BOOK NOW</button></div>`;
-    const bookNowButton = document.querySelector(`#room${availableRoom.number}`)
-  });
-  availableRooms.addEventListener('click', handleBookingClick)
+  if (!dataModel.searchedAvailableRooms.length) {
+    availableRooms.innerHTML = `<p>We are so sorry, we do not have vacancy on your chosen date! Please adjust your search.`;
+    return;
+  }
+
+  renderSearchedRooms();
+  availableRooms.addEventListener('click', handleBookingClick);
 };
 
 const handleBookingClick = (e) => {
-  
   let booking = {
-    "userID": loginCustomer.id,
-    "date": dataModel.date,
-    "roomNumber": Number(e.target.id)
-  }
-  postBooking(booking)
-  
+    userID: dataModel.loginCustomer.id,
+    date: dataModel.date,
+    roomNumber: Number(e.target.id),
+  };
+  postBooking(booking);
+
+  let choiceIndex = getChoiceIndex(e);
+  dataModel.searchedAvailableRooms.splice(choiceIndex, 1);
+  dataModel.bookings.bookings.push(booking);
+  bookingMessage.innerHTML = `${
+    dataModel.loginCustomer.name.split(' ')[0]
+  }, you successfully booked room ${e.target.id} on ${
+    dataModel.date
+  }. <br> Thank you for choosing Overlook. <br> We look forward to seeing you!`;
+  searchButtonClicked();
+  fetchSingleCustomer(dataModel.loginID);
+};
+
+function getChoiceIndex(e) {
+  return dataModel.searchedAvailableRooms.indexOf(
+    dataModel.searchedAvailableRooms.find((room) => room.number === Number(e.target.id))
+  );
 }
 
-export { loginButtonClicked, loginCustomer, searchButtonClicked };
+function renderSearchedRooms() {
+  dataModel.searchedAvailableRooms.forEach((availableRoom) => {
+    let className = availableRoom.roomType.split(' ').join('-');
+    let roomStyle = availableRoom.roomType.toUpperCase();
+    availableRooms.innerHTML += `<div class="${className}"><div class="info"><p>${roomStyle}</p><p>Room Number: ${availableRoom.number}</p><p>Bed(s): ${availableRoom.numBeds} ${availableRoom.bedSize}</p><p>Price: ${availableRoom.costPerNight}</p></div><button class='book-now' id="${availableRoom.number}">BOOK NOW</button></div>`;
+    const bookNowButton = document.querySelector(`#room${availableRoom.number}`);
+  });
+}
+
+export { loginButtonClicked, dataModel, searchButtonClicked, fetchAPI };
