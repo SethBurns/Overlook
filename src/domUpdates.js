@@ -16,7 +16,12 @@ import {
   dataModel,
 } from './scripts';
 
-import { filterAvailableRooms, returnBookings } from './testableFunctions';
+import {
+  filterAvailableRooms,
+  returnBookings,
+  calculateTotal,
+  getClassName,
+} from './testableFunctions';
 
 // API //
 const fetchAPI = (dataType) => {
@@ -115,32 +120,36 @@ const showLoginError = () => {
 };
 
 const renderBookings = () => {
-  dataModel.customerBookings = returnBookings(dataModel.loginCustomer.id);
+  dataModel.customerBookings = returnBookings(
+    dataModel.loginCustomer.id,
+    dataModel.bookings.bookings
+  );
   displayResults.innerHTML = ``;
-  dataModel.customerBookings.forEach((booking) => {
-    let className = dataModel.rooms.rooms
-      .find((room) => room.number === booking.roomNumber)
-      .roomType.split(' ')
-      .join('-');
-    let roomIndex = dataModel.rooms.rooms[booking.roomNumber - 1];
-    let roomStyle = className.split('-').join(' ').toUpperCase();
+  if (dataModel.customerBookings === `No current bookings found.`) {
+    displayResults.innerHTML = `${dataModel.customerBookings}`;
+  } else {
+    dataModel.customerBookings.forEach((booking) => {
+      let className = getClassName(booking, dataModel.rooms.rooms);
+      let roomIndex = dataModel.rooms.rooms[booking.roomNumber - 1];
+      let roomStyle = className.split('-').join(' ').toUpperCase();
 
-    displayResults.innerHTML += `<div class="${className}"><div class="info"><p>Date: ${booking.date}</p><p>${roomStyle}</p><p>Room Number: ${booking.roomNumber}</p><p>Bed(s): ${roomIndex.numBeds} ${roomIndex.bedSize}</p><p>Price: ${roomIndex.costPerNight}</p></div></div>`;
-  });
+      displayResults.innerHTML += `<div class="${className}"><div class="info"><p>Date: ${booking.date}</p><p>${roomStyle}</p><p>Room Number: ${booking.roomNumber}</p><p>Bed(s): ${roomIndex.numBeds} ${roomIndex.bedSize}</p><p>Price: ${roomIndex.costPerNight}</p></div></div>`;
+    });
+  }
 };
 
 const renderTotalSpent = () => {
-  let total = 0;
-
-  dataModel.customerBookings.forEach((booking) => {
-    return (total += dataModel.rooms.rooms[booking.roomNumber - 1].costPerNight);
-  });
+  let total = calculateTotal(dataModel.customerBookings, dataModel.rooms.rooms);
   totalSpent.innerHTML = `Your Total Bookings: $${Math.round(total * 100) / 100}`;
 };
 
 const searchButtonClicked = () => {
   dataModel.date = dateSelect.value.split('-').join('/');
-  let filteredRooms = filterAvailableRooms(dateSelect.value);
+  let filteredRooms = filterAvailableRooms(
+    dateSelect.value,
+    dataModel.bookings.bookings,
+    dataModel.rooms.rooms
+  );
   availableRoomsHeader.innerHTML = `Available Rooms for ${dateSelect.value}`;
   availableRooms.innerHTML = ``;
   show([searchedRooms]);
@@ -158,7 +167,7 @@ const searchButtonClicked = () => {
     dataModel.searchedAvailableRooms = filteredRooms;
   }
 
-  if (!dataModel.searchedAvailableRooms.length) {
+  if (filteredRooms === 'No rooms found!' || !dataModel.searchedAvailableRooms.length) {
     availableRooms.innerHTML = `<p>We are so sorry, we do not have vacancy on your chosen date! Please adjust your search.`;
     return;
   }
