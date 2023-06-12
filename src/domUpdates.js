@@ -12,12 +12,11 @@ import {
   availableRooms,
   availableRoomsHeader,
   searchedRooms,
+  bookingMessage,
   dataModel,
 } from './scripts';
 
 import { filterAvailableRooms, returnBookings } from './testableFunctions';
-
-
 
 // API //
 const fetchAPI = (dataType) => {
@@ -44,8 +43,8 @@ const postBooking = (booking) => {
     .then((data) => {
       console.log(data);
     })
-    .catch(() => alert("Something went wrong, your booking was not completed!"));
-}
+    .catch(() => alert('Something went wrong, your booking was not completed!'));
+};
 
 // Hide and Unhide functions //
 const hide = (e) => {
@@ -61,7 +60,6 @@ const show = (e) => {
 };
 
 const loginButtonClicked = () => {
-  
   if (username.value.includes('customer')) {
     dataModel.loginID = username.value.replace('customer', '');
   }
@@ -118,7 +116,7 @@ const showLoginError = () => {
 
 const renderBookings = () => {
   dataModel.customerBookings = returnBookings(dataModel.loginCustomer.id);
-  displayResults.innerHTML = ``
+  displayResults.innerHTML = ``;
   dataModel.customerBookings.forEach((booking) => {
     let className = dataModel.rooms.rooms
       .find((room) => room.number === booking.roomNumber)
@@ -177,15 +175,23 @@ const handleBookingClick = (e) => {
   };
   postBooking(booking);
 
-  let choiceIndex = dataModel.searchedAvailableRooms.indexOf(
-    dataModel.searchedAvailableRooms.find((room) => room.number === Number(e.target.id))
-  );
+  let choiceIndex = getChoiceIndex(e);
   dataModel.searchedAvailableRooms.splice(choiceIndex, 1);
   dataModel.bookings.bookings.push(booking);
-  console.log(dataModel);
+  bookingMessage.innerHTML = `${
+    dataModel.loginCustomer.name.split(' ')[0]
+  }, you successfully booked room ${e.target.id} on ${
+    dataModel.date
+  }. <br> Thank you for choosing Overlook. <br> We look forward to seeing you!`;
   searchButtonClicked();
   fetchSingleCustomer(dataModel.loginID);
 };
+
+function getChoiceIndex(e) {
+  return dataModel.searchedAvailableRooms.indexOf(
+    dataModel.searchedAvailableRooms.find((room) => room.number === Number(e.target.id))
+  );
+}
 
 function renderSearchedRooms() {
   dataModel.searchedAvailableRooms.forEach((availableRoom) => {

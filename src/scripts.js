@@ -37,6 +37,7 @@ const searchButton = document.querySelector('.search-rooms');
 const availableRoomsHeader = document.querySelector('.available-rooms-header')
 const availableRooms = document.querySelector('.available-rooms')
 const searchedRooms = document.querySelector('.searched-rooms')
+const bookingMessage = document.querySelector('.booking-message')
 
 
 const startup = () => {
@@ -75,5 +76,6 @@ export {
   availableRoomsHeader,
   availableRooms,
   searchedRooms,
+  bookingMessage,
   dataModel,
 };
